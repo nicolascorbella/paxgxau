@@ -1,4 +1,3 @@
-const API_KEY = "TU_API_KEY"; // reemplazá por tu key de GoldAPI
 const ctx = document.getElementById("paxgChart").getContext("2d");
 
 let chart = new Chart(ctx, {
@@ -23,14 +22,13 @@ let chart = new Chart(ctx, {
 });
 
 async function getPrices() {
-  // Precio PAXG/USDT en Binance
+  // Precio PAXG/USDT
   const paxgData = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=PAXGUSDT")
     .then(r => r.json());
 
-  // Precio Oro XAU/USD en GoldAPI
-  const goldData = await fetch("https://www.goldapi.io/api/XAU/USD", {
-    headers: { "x-access-token": API_KEY, "Content-Type": "application/json" }
-  }).then(r => r.json());
+  // Precio Oro XAU/USDT
+  const goldData = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=XAUUSDT")
+    .then(r => r.json());
 
   const paxgPrice = parseFloat(paxgData.price);
   const goldPrice = parseFloat(goldData.price);
@@ -53,5 +51,5 @@ async function updateChart() {
   chart.update();
 }
 
-setInterval(updateChart, 10000); // Actualiza cada 10s
+setInterval(updateChart, 10000); // Cada 10s
 updateChart();
