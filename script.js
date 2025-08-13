@@ -22,34 +22,38 @@ let chart = new Chart(ctx, {
 });
 
 async function getPrices() {
-  // Precio PAXG/USDT
-  const paxgData = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=PAXGUSDT")
+  // Precio de PAXG en USD
+  const paxgData = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=pax-gold&vs_currencies=usd")
     .then(r => r.json());
 
-  // Precio Oro XAU/USDT
-  const goldData = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=XAUUSDT")
+  // Precio de Oro (XAU) en USD
+  const goldData = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=gold&vs_currencies=usd")
     .then(r => r.json());
 
-  const paxgPrice = parseFloat(paxgData.price);
-  const goldPrice = parseFloat(goldData.price);
+  const paxgPrice = paxgData["pax-gold"].usd;
+  const goldPrice = goldData.gold.usd;
 
   return paxgPrice / goldPrice;
 }
 
 async function updateChart() {
-  const ratio = await getPrices();
-  const now = new Date().toLocaleTimeString();
+  try {
+    const ratio = await getPrices();
+    const now = new Date().toLocaleTimeString();
 
-  chart.data.labels.push(now);
-  chart.data.datasets[0].data.push(ratio);
+    chart.data.labels.push(now);
+    chart.data.datasets[0].data.push(ratio);
 
-  if (chart.data.labels.length > 20) {
-    chart.data.labels.shift();
-    chart.data.datasets[0].data.shift();
+    if (chart.data.labels.length > 20) {
+      chart.data.labels.shift();
+      chart.data.datasets[0].data.shift();
+    }
+
+    chart.update();
+  } catch (err) {
+    console.error("Error obteniendo precios:", err);
   }
-
-  chart.update();
 }
 
-setInterval(updateChart, 10000); // Cada 10s
+setInterval(updateChart, 10000); // cada 10s
 updateChart();
