@@ -1,4 +1,6 @@
 const ctx = document.getElementById("paxgChart").getContext("2d");
+const paxgPriceEl = document.getElementById("paxgPrice");
+const goldPriceEl = document.getElementById("goldPrice");
 
 let chart = new Chart(ctx, {
   type: "line",
@@ -22,16 +24,17 @@ let chart = new Chart(ctx, {
 });
 
 async function getPrices() {
-  // Precio de PAXG en USD
   const paxgData = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=pax-gold&vs_currencies=usd")
     .then(r => r.json());
 
-  // Precio de Oro (XAU) en USD
-  const goldData = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=gold&vs_currencies=usd")
+  const goldData = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether-gold&vs_currencies=usd")
     .then(r => r.json());
 
   const paxgPrice = paxgData["pax-gold"].usd;
-  const goldPrice = goldData.gold.usd;
+  const goldPrice = goldData["tether-gold"].usd;
+
+  paxgPriceEl.textContent = `$${paxgPrice.toFixed(2)}`;
+  goldPriceEl.textContent = `$${goldPrice.toFixed(2)}`;
 
   return paxgPrice / goldPrice;
 }
@@ -55,5 +58,5 @@ async function updateChart() {
   }
 }
 
-setInterval(updateChart, 10000); // cada 10s
+setInterval(updateChart, 10000);
 updateChart();
