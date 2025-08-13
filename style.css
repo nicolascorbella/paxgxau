@@ -6,16 +6,41 @@ body {
   padding: 20px;
 }
 
+h1 {
+  color: #d4af37;
+}
+
+.price-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.price-card {
+  background: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.price-card .label {
+  display: block;
+  font-weight: bold;
+  color: #555;
+}
+
+.price-card .value {
+  font-size: 1.5em;
+  color: #000;
+}
+
 canvas {
   max-width: 900px;
-  margin: 20px auto;
+  margin: auto;
   background: white;
   border-radius: 10px;
   padding: 10px;
-}
-
-h1 {
-  color: #d4af37; /* color oro */
 }
 
 footer {
